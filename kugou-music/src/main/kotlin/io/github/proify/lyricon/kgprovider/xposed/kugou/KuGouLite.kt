@@ -88,7 +88,7 @@ class KuGouLite : KuGou() {
                         val isClose = param?.args?.getOrNull(2) as? Boolean ?: true
                         if (!isClose && !lyric.isNullOrEmpty()) {
                             val lInst = callStaticMethod("com.kugou.framework.lyric.l", "a", loader)
-                            val lyricData = lInst?.let { callMethod(it, "k", loader) }
+                            val lyricData = lInst?.let { callMethodNoArg(it, "k") }
                             if (lyricData != null) {
                                 val currentLine = getField(param.thisObject, "a") as? Int ?: 0
                                 val wordss = getField(lyricData, "e") as? Array<*>
@@ -174,6 +174,14 @@ class KuGouLite : KuGou() {
         return try {
             val clazz = obj.javaClass
             clazz.getDeclaredMethod(methodName, Int::class.javaPrimitiveType).apply { isAccessible = true }.invoke(obj, arg)
+        } catch (_: Throwable) {
+            null
+        }
+    }
+
+    private fun callMethodNoArg(obj: Any, methodName: String): Any? {
+        return try {
+            obj.javaClass.getDeclaredMethod(methodName).apply { isAccessible = true }.invoke(obj)
         } catch (_: Throwable) {
             null
         }
