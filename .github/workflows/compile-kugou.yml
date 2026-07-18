@@ -1,4 +1,4 @@
-name: Compile KuGou Music (verify only)
+name: Build KuGou Music APK (verify only)
 
 on:
   workflow_dispatch:
@@ -11,8 +11,8 @@ on:
       - 'settings.gradle.kts'
 
 jobs:
-  compile-kugou:
-    name: Compile kugou-music debug
+  assemble-kugou:
+    name: Assemble kugou-music debug APK
     runs-on: ubuntu-latest
 
     steps:
@@ -36,5 +36,13 @@ jobs:
           gradle-version: wrapper
           cache-disabled: false
 
-      - name: Compile kugou-music (no APK signing)
-        run: ./gradlew :kugou-music:compileDebugKotlin --build-cache
+      - name: Assemble kugou-music debug APK
+        run: ./gradlew :kugou-music:assembleDebug --build-cache
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: kugou-music-debug-apk
+          path: kugou-music/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
+          archive: false
