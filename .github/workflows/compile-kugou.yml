@@ -1,0 +1,40 @@
+name: Compile KuGou Music (verify only)
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'kugou-music/**'
+      - 'share/**'
+      - 'gradle/**'
+      - 'build.gradle.kts'
+      - 'settings.gradle.kts'
+
+jobs:
+  compile-kugou:
+    name: Compile kugou-music debug
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
+      - name: Setup Gradle with Caching
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: wrapper
+          cache-disabled: false
+
+      - name: Compile kugou-music (no APK signing)
+        run: ./gradlew :kugou-music:compileDebugKotlin --build-cache
