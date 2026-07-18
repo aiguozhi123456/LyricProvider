@@ -44,7 +44,7 @@ jobs:
             -alias androiddebugkey \
             -dname "CN=Android Debug,O=Android,C=US" \
             -storepass android -keypass android
-          echo "RELEASE_STORE_FILE=kugou-music/release.jks" >> "$GITHUB_ENV"
+          echo "RELEASE_STORE_FILE=release.jks" >> "$GITHUB_ENV"
           echo "RELEASE_STORE_PASSWORD=android" >> "$GITHUB_ENV"
           echo "RELEASE_KEY_ALIAS=androiddebugkey" >> "$GITHUB_ENV"
           echo "RELEASE_KEY_PASSWORD=android" >> "$GITHUB_ENV"
