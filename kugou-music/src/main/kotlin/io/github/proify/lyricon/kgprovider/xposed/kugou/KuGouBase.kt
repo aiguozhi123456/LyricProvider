@@ -131,7 +131,7 @@ abstract class KuGouBase : YukiBaseHooker() {
 //            }
 //        }
 
-        val method = findLoadLyricMethodFromDexKit()
+        val method = findLoadLyricMethodFromDexKit() ?: return
 
         XposedBridge.hookMethod(method, object : XC_MethodHook() {
             override fun afterHookedMethod(param: MethodHookParam?) {
@@ -236,7 +236,7 @@ abstract class KuGouBase : YukiBaseHooker() {
     /**
      * 接收到解析完成的歌词
      */
-    private fun onReceiveLyrics(lyrics: List<RichLyricLine>) {
+    protected fun onReceiveLyrics(lyrics: List<RichLyricLine>) {
         if (currentSongId.isNullOrBlank()) return
         sendLyrics(lyrics)
     }
