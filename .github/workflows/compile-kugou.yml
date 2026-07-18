@@ -36,6 +36,19 @@ jobs:
           gradle-version: wrapper
           cache-disabled: false
 
+      - name: Generate debug keystore for signing
+        run: |
+          keytool -genkeypair -v \
+            -keystore release.jks \
+            -keyalg RSA -keysize 2048 -validity 10000 \
+            -alias androiddebugkey \
+            -dname "CN=Android Debug,O=Android,C=US" \
+            -storepass android -keypass android
+          echo "RELEASE_STORE_FILE=release.jks" >> "$GITHUB_ENV"
+          echo "RELEASE_STORE_PASSWORD=android" >> "$GITHUB_ENV"
+          echo "RELEASE_KEY_ALIAS=androiddebugkey" >> "$GITHUB_ENV"
+          echo "RELEASE_KEY_PASSWORD=android" >> "$GITHUB_ENV"
+
       - name: Assemble kugou-music debug APK
         run: ./gradlew :kugou-music:assembleDebug --build-cache
 
